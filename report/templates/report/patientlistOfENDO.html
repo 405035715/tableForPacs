@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/static/report/css/patientlist.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+    <title>超声报告列表</title>
+</head>
+<body>
+    <div id="container" style="width:1000px;margin: 0 auto;margin-top: 20px">
+       <div style="background-color: #999999;padding: 15px;">
+        <a href="/report/patientlistOfUS" target="_parent" style="margin-top:50px;padding: 10px;background-color:#282B2E;height:30px;width:200px;text-align: center; font-size: large">超声报告</a>
+        <a href="/report/patientlistOfFSK" target="_parent" style="margin-top:50px;padding: 10px;background-color:#282B2E;height:30px;width:200px;text-align: center; font-size: large; ">放射报告</a>
+        <a href="/report/patientlistOfENDO" target="_parent" style="margin-top:50px;padding: 10px;background-color:mediumblue;height:30px;width:200px;text-align: center; font-size: large; ">内镜报告</a>
+        </div>
+        <div  style="background-color:white;height:20px;width:1000px; ">
+        </div>
+        <div>
+            <form action="/report/patientlistOfENDO" method="get">
+                姓名：<input type="text" name="name" value="{{ name }}">
+                 &nbsp;&nbsp;&nbsp;&nbsp; 检查时间：<input type="radio" name="examinetime" value="1" checked>1天内
+                <input type="radio" name="examinetime" value="3">3天内
+                <input type="radio" name="examinetime" value="7">7天内
+                <input type="radio" name="examinetime" value="-1">全部&nbsp;&nbsp;&nbsp;&nbsp;
+                <input  type="submit" value="查询"  style="width: 180px;">
+            </form>
+        </div>
+
+        <div style="margin: auto; margin-top: 20px">
+            <table border="1" style="top: 20px;text-align: center;width: 1000px" >
+                <tr style="background-color: #00ad9c">
+                    <td>id</td></td><td>姓名</td><td>性别</td><td>年龄</td><td>部位</td><td>检查时间</td><td>操作</td>
+                </tr>
+                {%  for patient in  patintlist %}
+                     <tr>
+                          <form action="/report/reportOfENDO"  method="get">
+                              <td><input type="label"  style="border:0px;background-color:transparent;" value="{{ patient.patientid }}" name="patientid" readonly="readonly"></td>
+                              <td>{{ patient.name }}</td>
+                              <td>{{ patient.sex }}</td>
+                              <td>{{ patient.age }}</td>
+                              <td>{{ patient.bodypart }}</td>
+                              <td><input type="label"  style="border:0px;background-color:transparent;" value="{{ patient.time }}" name="time" readonly="readonly"></td>
+                              <td><input type="submit" value="查看"></td>
+                          </form>
+                     </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

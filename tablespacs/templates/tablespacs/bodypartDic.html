@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登记维护</title>
+    <link rel="stylesheet" href="/static/css/jquery-ui.css">
+    <script type="text/javascript" src="/static/js/jquery-2.2.3.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+    <!-- 匹配Django 的post请求头 -->
+    <script src="/static/js/bodypartDic_ajaxfromDjango.js"></script>
+    <!-- ajax 方法 -->
+
+    <script type="text/javascript">
+        jQuery(function ($) {
+            //film选择 数量选好后会触发事件
+            $("#film_select_num").change(function () {
+                if ($("#film_text").val() == ""){
+                    var s = $("#film_text").val() + $("#film_select_item").val() + "(" + $("#film_select_num").val() + ")";
+                    $("#film_text").val(s);
+                    //alert(s)
+                }else {
+                    var s1 = $("#film_text").val() +","+ $("#film_select_item").val() + "(" + $("#film_select_num").val() + ")";
+                    $("#film_text").val(s1);
+                    //alert(s1)
+                }
+            });
+            //对话框
+            dialog = $("#dialog").dialog({
+                autoOpen: false,
+                height: 350,
+                width: 450,
+                modal: true,
+                buttons: {
+                    "提交修改": function () {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/tablespacs/bodypartDic/',
+                            data: {
+                                "posttype": "modify",
+                                "mdl":$("#mdl").val(),
+                                "bodypart": $("#bodypart").val(),
+                                "fee": $("#film_fee").val(),
+                                "film_text": $("#film_text").val(),
+                            },    //post请求的条件
+                            //dataType: 'json',
+                            success: function (result) {
+                                dialog.dialog("close");
+                                $("#film_text").val("");//清空数据
+                                $("#film_fee").val("");
+                                $("#bodypart").val("");
+                                $.postJSON(); //刷新数据
+                            },
+                            error: function () {
+                                alert("保存失败");
+                            }
+                        });
+                    },
+                    Cancel: function () {
+                        dialog.dialog("close");
+                        $("#film_text").val("");//清空数据
+                        $("#film_fee").val("");
+                        $("#bodypart").val("");
+                        $.postJSON(); //刷新数据
+                    }
+                },
+                close: function () {
+                    //allFields.removeClass( "ui-state-error" );
+                }
+            });
+            $.postJSON = function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/tablespacs/bodypartDic/',
+                    data: {
+                        "posttype": "mdl",
+                        "mdl": $("#mdl").val()
+                    },    //post请求的条件
+                    //dataType: 'json',
+                    success: function (result) {
+                        $("#tabletr").siblings().remove();
+                        for (var i = 0; i < result.length; i++) {
+
+                            $("#tabletr").after("<tr  onclick=\"tdclick(this)\"> <td >" + result[i][0] + "</td> <td  >"+result[i][1]+"</td> <td  >"+result[i][2]+"</td></tr>");
+                        }
+                    },
+                    error: function () {
+                        alert("保存失败");
+                    }
+                });
+            };
+            $.postJSON();
+            $("#mdl").change(function () {
+                $.postJSON();
+            });
+        });
+    </script>
+    <script>
+        var onselectTR; //被选中行
+        function tdclick(obj) {
+            //对话框
+            dialog.dialog("open");
+            $("#bodypart").val($(obj).children(":eq(0)").text());
+            if( $(obj).children(":eq(1)").text() == "null"){
+                $("#film_fee").val();
+            }else {
+                 $("#film_fee").val($(obj).children(":eq(1)").text());
+            }
+
+            if ($(obj).children(":eq(2)").text() == "null"){
+                 $("#film_text").val();
+            }else {
+                $("#film_text").val($(obj).children(":eq(2)").text());
+            }
+
+
+            //alert( $(obj).val());
+            if (onselectTR) {
+                onselectTR.children().css({"background-color": "white"});
+            }
+            //选中状态：背景色改变
+            onselectTR = $(obj);
+            $(obj).children().css({"background-color": "#993300"});
+
+        }
+    </script>
+</head>
+<body>
+
+<div id="container" style="width:1000px;margin-left: 20px;margin: 0 auto;">
+    <div id="header" style="background-color:#FFA100;">
+        <h1 style="margin-bottom:0;text-align: center">桐庐县第二人民医院</h1></div>
+    <div id="footer" style="background-color:rosybrown;clear:both;text-align:center;">
+        放射科登记：部位-费用-胶片对应表
+    </div>
+    <div style="background-color:white;height:20px;width:1000px; float:left;"></div>
+    <div style="background-color:rosybrown;clear:both;text-align:left;">
+
+        <select name="mdl" id="mdl">
+            {% for mdl in mdls %}
+                <option>{{ mdl }}</option>
+            {% endfor %}
+        </select>
+
+    </div>
+    <div style="margin: auto">
+        <table border="1" style="top: 20px;text-align: center;width: 1000px">
+            <tr id="tabletr" style="background-color: darkgoldenrod;width: 1000px;">
+                <td style="width: 300px">部位</td>
+                <td>费用</td>
+                <td>胶片</td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+<div id="dialog" title="修改'部位-费用-胶片'关联：" style="display: none">
+    <form style="margin: 0 auto;">
+        <fieldset>
+            <label>部位：</label><br/>
+            <input type="text" name="name" id="bodypart" value="胸部" class="text ui-widget-content ui-corner-all"><br/>
+            <label>检查费用：</label><br/>
+            <input type="text" name="film_fee" id="film_fee" value="" class="text ui-widget-content ui-corner-all"><br/>
+            <label>胶片：</label><br/>
+            <input type="text" name="film_text" id="film_text" value=""
+                   class="text ui-widget-content ui-corner-all">
+
+            <select id="film_select_item" value="">
+                <option style="width:200px">14INX17IN</option>
+                <option style="width:200px">8INX10IN</option>
+                <option style="width:200px">10INX14IN</option>
+ 		<option style="width:200px">11INX14IN</option>
+            </select>
+            <select id="film_select_num" value="">
+                <option style="width:200px">1</option>
+                <option style="width:200px">2</option>
+                <option style="width:200px">3</option>
+                <option style="width:200px">4</option>
+                <option style="width:200px">5</option>
+                <option style="width:200px">6</option>
+            </select>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

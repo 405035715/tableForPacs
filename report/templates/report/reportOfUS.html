@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/static/report/css/patientlist.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+    <title>报告首页</title>
+</head>
+<body>
+    <div id="container" style="width:800px;margin-left: 20px;margin: 0 auto;">
+        <div style="background-color: #999999;padding: 15px;">
+        <a href="/report/patientlistOfUS" target="_parent" style="margin-top:50px;padding: 10px;background-color:mediumblue;height:30px;width:200px;text-align: center; font-size: large">超声报告</a>
+        <a href="/report/patientlistOfFSK" target="_parent" style="margin-top:50px;padding: 10px;background-color:#282B2E;height:30px;width:200px;text-align: center; font-size: large; ">放射报告</a>
+        <a href="/report/patientlistOfENDO" target="_parent" style="margin-top:50px;padding: 10px;background-color:#282B2E;height:30px;width:200px;text-align: center; font-size: large; ">内镜报告</a>
+        </div>
+        <div  style="background-color:white;height:20px;width:800px; float:left;">
+        </div>
+            <p>姓名：{{ reportDic.name }} &nbsp;&nbsp;&nbsp;&nbsp; 性别：{{ reportDic.sex }}  &nbsp;&nbsp;&nbsp;&nbsp;年龄：{{ reportDic.age }}  </p>
+            <p>检查部位：{{ reportDic.bodypart }}</p>
+            <hr/>
+            <h3>超声描述：</h3>
+            <div>{{ reportDic.diagfind }}</div>
+            <h3>超声提示：</h3>
+            <div>{{ reportDic.conclusion }}</div>
+            <hr/>
+            <p>检查医生：{{ reportDic.doctor }} &nbsp;&nbsp;&nbsp;&nbsp;检查时间: {{ reportDic.time }}</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ajax test</title>
+<script type="text/javascript" src="/static/js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript">
+    //匹配Django 的post请求头
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+
+    jQuery(function($){
+        $('button').click(function(){
+
+            //$name = $(this).attr('name');
+            //ajax 导入数据
+            //$('#out').load('/tablespacs/ajax/');
+            //ajax: get 请求
+            //$.get("/tablespacs/ajax_deal/",function(data,status){
+                //alert("Data: " + data + "  Status: " + status);
+            //});
+           // ajax : post 请求
+           // $.post("/tablespacs/ajax_deal/",{name:"Donald Duck", city:"Duckburg"}, function(data,status){
+             //   alert("Data: " + data + "  Status: " + status);
+            //});
+            //
+            $.ajax({
+                type: 'POST',
+                url: '/tablespacs/ajax/',
+                data:{"aa":$("#aa").val()},    //post请求的条件
+                //dataType: 'json',
+                success:function(result){
+                    for (var i = 0; i < result.length; i++){
+                        $("#out").after(result[i]["twz"])
+                    }
+                },
+                error: function() {
+                    alert("保存失败");}
+            });
+        });
+    });
+</script>
+<style type="text/css"></style>
+</head>
+
+<body>
+<button id="btn-1" name="1">1</button>
+<button id="btn-2" name="2">2</button>
+<button id="btn-3" name="3">3</button>
+<div id="out"></div>
+
+<form method="POST" id="post-form" action="/tablespacs/ajax/">
+    {% csrf_token %}
+    <input id="aa" type="text" value="aa" name="aa">
+    <input type="submit" value="Post" >
+</form>
+
+</body>
+</html>
+
+
+

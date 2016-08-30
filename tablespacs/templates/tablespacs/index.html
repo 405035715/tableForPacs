@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../static/js/jquery-2.2.3.js"></script>
+    <meta charset="UTF-8">
+    <title>统计</title>
+    <style>
+        .td{width:60px;overflow:auto}
+    </style>
+</head>
+<body>
+    <div id="container" style="width:1000px;margin-left: 20px;margin: 0 auto;">
+
+        <div id="header" style="background-color:#FFA100;">
+            <h1 style="margin-bottom:0;text-align: center">桐庐县第二人民医院</h1></div>
+        <div id="footer" style="background-color:rosybrown;clear:both;text-align:center;">
+            放射科统计表
+        </div>
+        <div  style="background-color:white;height:20px;width:1000px; float:left;">
+        </div>
+        <script>
+            function countdate() {
+                if ((document.getElementById("date1").firstElementChild.value ) && (document.getElementById("date2").firstElementChild.value)) {
+                    var date1 = document.getElementById("date1").firstElementChild.value;
+                    var date2 = document.getElementById("date2").firstElementChild.value;
+                    var startTime = new Date(Date.parse(date1.replace(/-/g, "/"))).getTime();
+                    var endTime = new Date(Date.parse(date2.replace(/-/g, "/"))).getTime();
+                    var dates = Math.abs((startTime - endTime)) / (1000 * 60 * 60 * 24);
+                    document.getElementById("date3").innerHTML = dates;
+                }
+            }
+        </script>
+        <form action="?action=add"> {% csrf_token %}
+            <div  style="background-color:#FFD700;height:20px;width:180px;float:left;text-align: center"> 开始日期
+            </div>
+            <div id="date1" style="background-color:#EEEEEE;height:20px;width:180px;float:left;text-align: center">
+                <input id="startDate" type="date" name="startDate" onchange="countdate()" value={{table_startDate}} /></div>
+            <div  style="background-color:#FFD700;height:20px;width:180px;float:left;text-align: center"> 结束日期
+            </div>
+            <div id="date2" style="background-color:#EEEEEE ;;height:20px;width:180px;float:left;text-align: center">
+                <input id="endDate" type="date" name="endDate" onchange="countdate()" value={{ table_endDate}} /></div>
+            <div  style="background-color:#FFD700;height:20px;width:140px;float:left;text-align: center"> 天数
+            </div>
+            <div id="date3" style="background-color:#EEEEEE;height:20px;width:140px;float:left;text-align: center">
+                <script>
+                     if ((document.getElementById("date1").firstElementChild.value ) && (document.getElementById("date2").firstElementChild.value)) {
+                    var date1 = document.getElementById("date1").firstElementChild.value;
+                    var date2 = document.getElementById("date2").firstElementChild.value;
+                    var startTime = new Date(Date.parse(date1.replace(/-/g, "/"))).getTime();
+                    var endTime = new Date(Date.parse(date2.replace(/-/g, "/"))).getTime();
+                    var dates = Math.abs((startTime - endTime)) / (1000 * 60 * 60 * 24);
+                    document.getElementById("date3").innerHTML = dates;
+                }
+                </script>
+            </div>
+            <div  style="background-color:white;height:20px;width:1000px; float:left;">
+                <input  type="submit" value="统计" formmethod="post" style="width: 180px;">
+            </div>
+        </form>
+        <div style="margin: auto">
+            <table border="1" style="top: 20px;text-align: center;width: 1000px" >
+                <tr style="background-color: darkgoldenrod;width: 1000px;">
+                    <td rowspan="2">医生</td><td colspan="4">合计</td><td colspan="4">子项</td>
+                </tr>
+                <tr style="background-color: darkorange;">
+                    <td style="width: 80px;overflow: auto">检查人次</td><td class="td">费用</td><td class="td">部位数</td><td class="td">胶片数</td> <td>检查类型</td ><td style="width: 80px;overflow: auto">检查人次</td><td class="td">费用</td><td class="td">部位数</td>
+                </tr>
+                {% for row in table_tongjiall%}
+                    <tr style="background-color: cornflowerblue">
+                    {% for td in row.tongji %}
+                        <td>{{ td }}</td>
+                    {% endfor %}
+                    <td/> <td/> <td/> <td/>
+                    </tr>
+                    {% for tdDetail in row.tongjiDetail%}
+                        <tr> <td/> <td/> <td/> <td/> <td/>
+                        {% for temp in tdDetail %}
+                                    <td>{{ temp }}</td>
+                        {% endfor %}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+                <tr style="background-color: burlywood"><td>总计</td>
+                    {% for t in  table_tongjicount %}
+                        <td>{{t}}</td>
+                    {% endfor %}<td>{{ table_tongji_film_count}}</td><td></td><td></td><td></td><td></td></tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

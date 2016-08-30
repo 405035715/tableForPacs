@@ -1,0 +1,24 @@
+body 
+{
+    background-color:#b0c4de;
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+h1 {
+    letter-spacing: 3px;
+    line-height: 120%;
+    background-color: #003eff;
+    text-decoration: underline;
+}
+p {background-color: #79aec8}
+p.date {
+    text-align: right;
+}
+
+p.main {
+    /*white-space: nowrap;*/
+    text-indent: 50px;
+    line-height: 200%;
+    text-align: justify;
+}
+div {background-color: red}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试jQuery</title>
+    <style>
+    a.test {
+        font-weight: bold;
+        background-color: #FFA100;
+    }
+    </style>
+    <style>
+        #panel,#flip
+        {
+        padding:5px;
+        text-align:center;
+        background-color:#e5eecc;
+        border:solid 1px #c3c3c3;
+        }
+        #panel
+        {
+        padding:50px;
+        display:none;
+        }
+    </style>
+
+    <script src="/static/js/jquery-2.2.3.min.js"></script>
+    <script>
+      $(function(){
+          $("p").click(function(event){
+                //event.preventDefault(); $("p").hide();
+            });
+          //事件单击 效果：添加样式类
+          $("a").addClass("test")
+          $( "a" ).click(function( event ) {
+                alert( "The link will no longer take you to jquery.com" );
+                //event.preventDefault();
+            });
+          //事件：双击 效果：隐藏
+          $("#pi01").dblclick(function(enent){
+                $(this).hide();
+          });
+      });
+      $(document).ready(function(){
+           //事件：单击 效果：隐藏或显示
+          $("#toggle").click(function(){
+                $("p").toggle();
+          });
+          //事件：单击 效果：滑动
+          $("#flip").click(function(){$("#panel").slideToggle("slow");});
+          //事件：单击 效果：动画
+          $("#animate").click(function(){
+              var div =  $("#animateDiv")
+             div.animate({
+                  left:'250px',
+                  opacity:'0.5',
+                  height:'150px',
+                  width:'150px'
+              });
+              div.animate({height:'300px',opacity:'0.4'},"slow");
+              div.animate({width:'300px',opacity:'0.8'},"slow");
+              div.animate({height:'100px',opacity:'0.4'},"slow");
+              div.animate({width:'100px',opacity:'0.8'},"slow");
+          });
+          //操作DOM  //值操作
+          $("#btn1").click(function(){
+              $("#test1").text("Hello world!");
+          });
+          $("#btn2").click(function(){
+              $("#test2").html("<b>Hello world!</b>");
+          });
+          $("#btn3").click(function(){
+              $("#test3").val("Dolly Duck");
+          });
+          //操作DOM //属性操作
+          $("#btn4").click($("#href01").attr("href","http://sina.com"));
+          //添加元素   append() - 在被选元素的结尾插入内容prepend() - 在被选元素的开头插入内容 after() - 在被选元素之后插入内容 before() - 在被选元素之前插入内容
+           $("#btn5").click(function appendText()
+             {
+                var txt1="<p>Text.</p>";              // Create text with HTML
+                var txt2=$("<p></p>").text("Text.");  // Create text with jQuery
+                var txt3=document.createElement("p");
+                txt3.innerHTML="Text.";               // Create text with DOM
+                $("body").append(txt1,txt2,txt3);        // Append new elements
+             });
+      });
+    </script>
+</head>
+<body>
+    <a id='href01' target="_blank" href="http://jquery.com/">jQuery</a>
+    <p>如果你点击“隐藏” 按钮，我将会消失。</p>
+    <button id="toggle">隐藏/显示</button>
+    <button id="animate">动画</button>
+    <div id="flip">Click to slide the panel down or up</div>
+    <div id="panel">Hello world!</div>
+    <div id="animateDiv" style="background:#98bf21;height:100px;width:100px;position:absolute;"></div>
+    <div style="margin-top: 100px">
+        <p id="test1">This is a paragraph.</p>
+        <p id="test2">This is another paragraph.</p>
+        <p>Input field: <input type="text" id="test3" value="Mickey Mouse"></p>
+        <button id="btn1">Set Text</button>
+        <button id="btn2">Set HTML</button>
+        <button id="btn3">Set Value</button>
+        <button id="btn4">Set attr</button>
+        <button id="btn5">添加元素</button>
+    </div>
+</body>
+</html>
+
+
