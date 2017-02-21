@@ -10,7 +10,7 @@ import json
 #查询数据库
 def selSql(selStr):
     sqlresult =[]
-    connectStr = 'DRIVER={SQL Server};SERVER=192.168.1.4;PORT=1433;DATABASE=espacs;UID=sa;PWD=easy'
+    connectStr = 'DRIVER={SQL Server};SERVER=192.168.1.6;PORT=1433;DATABASE=espacs;UID=sa;PWD=easy'
     cnxn = pyodbc.connect(connectStr)
     cursor = cnxn.cursor()
     try:
@@ -30,7 +30,7 @@ def selSql(selStr):
     return sqlresult
 #插入数据库:espacs
 def insertSql(insertStr):
-    connectStr = 'DRIVER={SQL Server};SERVER=192.168.1.4;PORT=1433;DATABASE=espacs;UID=sa;PWD=easy'
+    connectStr = 'DRIVER={SQL Server};SERVER=192.168.1.6;PORT=1433;DATABASE=espacs;UID=sa;PWD=easy'
     cnxn = pyodbc.connect(connectStr)
     cursor = cnxn.cursor()
     try:
@@ -52,7 +52,7 @@ def index(request):
         startDate = request.POST['startDate']
         endDate = request.POST['endDate']
         #查询总表
-        selstr_tongji = 'SET NOCOUNT ON; EXEC  tj_P_RUN_PROCDURE_WITH_SELECTRETURN  \'tj_getClinicalDoctor_bodypart_fee\',\'@sModality=0,@odtRegisterBegin=\'\'%s\'\',@odtRegisterEnd=\'\'%s\'\'\'' %(startDate,endDate)
+        selstr_tongji = 'SET NOCOUNT ON; EXEC  tj_P_RUN_PROCDURE_WITH_SELECTRETURN  \'tj_getClinicalDoctor_bodypart_fee\',\'@sModality=0, @odtRegisterBegin=\'\'%s\'\',@odtRegisterEnd=\'\'%s\'\'\'' %(startDate,endDate)
         tongji = selSql(selstr_tongji)
         #胶片统计-分送检医生
         selstr_tongji_films = 'SET NOCOUNT ON; EXEC  tj_P_RUN_PROCDURE_WITH_SELECTRETURN  \'tj_getClinicalDoctor_bodypart_film\',\'@odtRegisterBegin=\'\'%s\'\',@odtRegisterEnd=\'\'%s\'\'\'' %(startDate,endDate)

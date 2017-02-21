@@ -293,11 +293,11 @@ def selSql(selStr, sqldbtype):
     sqlresult =[]
     connectStr = ''
     if 'USDB' == sqldbtype:
-        connectStr = 'DRIVER={SQL Server};SERVER=192.168.1.4;PORT=1433;DATABASE=videocapture;UID=sa;PWD=easy'
+        connectStr = 'DRIVER={SQL Server};SERVER=127.0.0.1;PORT=1433;DATABASE=videocapture;UID=sa;PWD=easy'
     elif 'FSKDB' == sqldbtype:
-        connectStr = 'DRIVER={SQL Server};SERVER=192.168.1.4;PORT=1433;DATABASE=espacs;UID=sa;PWD=easy'
+        connectStr = 'DRIVER={SQL Server};SERVER=127.0.0.1;PORT=1433;DATABASE=espacs;UID=sa;PWD=easy'
     elif 'ENDODB' == sqldbtype:
-        connectStr = 'DRIVER={SQL Server};SERVER=192.168.1.4;PORT=1433;DATABASE=gastroscope;UID=sa;PWD=easy'
+        connectStr = 'DRIVER={SQL Server};SERVER=127.0.0.1;PORT=1433;DATABASE=gastroscope;UID=sa;PWD=easy'
     try:
         cnxn = pyodbc.connect(connectStr)
         cursor = cnxn.cursor()

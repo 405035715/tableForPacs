@@ -33,11 +33,11 @@
         <form action="?action=add"> {% csrf_token %}
             <div  style="background-color:#FFD700;height:20px;width:180px;float:left;text-align: center"> 开始日期
             </div>
-            <div id="date1" style="background-color:#EEEEEE;height:20px;width:180px;float:left;text-align: center">
+            <div id="date1" style="background-color:#EEEEEE;width:180px;float:left;text-align: center">
                 <input id="startDate" type="date" name="startDate" onchange="countdate()" value={{table_startDate}} /></div>
             <div  style="background-color:#FFD700;height:20px;width:180px;float:left;text-align: center"> 结束日期
             </div>
-            <div id="date2" style="background-color:#EEEEEE ;;height:20px;width:180px;float:left;text-align: center">
+            <div id="date2" style="background-color:#EEEEEE ;width:180px;float:left;text-align: center">
                 <input id="endDate" type="date" name="endDate" onchange="countdate()" value={{ table_endDate}} /></div>
             <div  style="background-color:#FFD700;height:20px;width:140px;float:left;text-align: center"> 天数
             </div>
@@ -53,9 +53,30 @@
                 }
                 </script>
             </div>
-            <div  style="background-color:white;height:20px;width:1000px; float:left;">
-                <input id="bodypart" name="bodypart" type="text" style="float: left" placeholder="请输入部位：" value={{ table_bodypart }} >
-                <input  type="submit" value="统计" formmethod="post" style="width: 180px;" style="float: left">
+            <div  style="background-color:white;margin: 10px; width:1000px; float:left;">
+{#                <input id="bodypart" name="bodypart" type="text" style="float: left" placeholder="请输入部位：" value={{ table_bodypart }} >#}
+                <div style="float: left">检查部位：</div>
+                <div style="float: left">
+                    <select id="bodypart" name="bodypart" style="width: 100px; float: left; ">
+                        <option value="全部" selected ="selected">全部</option>
+                        {% for name in bodyparts %}
+                            <option value="{{ name}}">{{ name}}</option>
+                        {% endfor %}
+                     </select>
+                </div>
+                <div style="float: left">&nbsp;&nbsp;&nbsp;医生：</div>
+                <div style="float: left">
+                    <select id="doctor" name="doctor" style="width: 100px;">
+                        <option value="全部" selected ="selected">全部</option>
+                        {% for name in doctors %}
+                            <option value="{{ name}}">{{ name}}</option>
+                        {% endfor %}
+                     </select>
+                </div>
+                <div style="float: left; padding-left: 30px">
+                    <input  type="submit" value="统计" formmethod="post" style="width: 180px;" style="float: left;">
+                </div>
+
             </div>
         </form>
         <div style="margin: auto">
@@ -63,7 +84,6 @@
                 <tr style="background-color: darkgoldenrod;width: 1000px;">
                     <td>姓名</td><td>部位</td><td>检查时间</td>
                 </tr>
-
                 {% for row in table_tongji %}
                     <tr style="background-color: cornflowerblue">
                     {% for td in row %}
